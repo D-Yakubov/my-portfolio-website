@@ -6,22 +6,55 @@ type Props = {
 }
 
 const { entry } = Astro.props;
+const isProject = entry.collection === "projects";
+const techStack = isProject && "techStack" in entry.data ? (entry.data.techStack as string[] | undefined) : undefined;
+const businessImpact = isProject && "businessImpact" in entry.data ? (entry.data.businessImpact as string | undefined) : undefined;
 ---
 
-<a href={`/${entry.collection}/${entry.slug}`} class="relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out">
-  <div class="flex flex-col flex-1 truncate">
-    <div class="font-semibold">
-      {entry.data.title}
+<a 
+  href={`/${entry.collection}/${entry.slug}`} 
+  class="relative group flex flex-col py-3.5 px-4 pr-10 rounded-lg border border-neutral-300 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/30 hover:border-neutral-400 dark:hover:border-neutral-700 hover:bg-neutral-100/60 dark:hover:bg-neutral-800/40 transition-all duration-200"
+>
+  <div class="flex flex-col gap-1.5">
+    <div class="flex items-center gap-2">
+      <span class="font-semibold text-sm sm:text-base text-black dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+        {entry.data.title}
+      </span>
+      {isProject && (
+        <span class="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">
+          Case Study
+        </span>
+      )}
     </div>
-    <div class="text-sm">
+
+    <div class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans">
       {entry.data.description}
     </div>
+
+    {businessImpact && (
+      <div class="mt-1.5 text-xs font-mono rounded bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-1.5 text-emerald-900 dark:text-emerald-300 flex items-start gap-1.5">
+        <span class="font-bold text-emerald-600 dark:text-emerald-400 shrink-0">[Business Impact &bull; ROI]:</span>
+        <span class="leading-snug">{businessImpact}</span>
+      </div>
+    )}
+
+    {techStack && techStack.length > 0 && (
+      <div class="mt-1 flex flex-wrap items-center gap-1.5 text-[11px] font-mono text-neutral-600 dark:text-neutral-400">
+        <span class="opacity-50">stack:</span>
+        {techStack.map((tech) => (
+          <span class="px-1.5 py-0.5 rounded border border-neutral-300 dark:border-neutral-800 bg-neutral-200/50 dark:bg-neutral-800/60 text-neutral-800 dark:text-neutral-300">
+            {tech}
+          </span>
+        ))}
+      </div>
+    )}
   </div>
+
   <svg 
     xmlns="http://www.w3.org/2000/svg" 
     viewBox="0 0 24 24"
-    class="absolute top-1/2 right-2 -translate-y-1/2 size-5 stroke-2 fill-none stroke-current">
-    <line x1="5" y1="12" x2="19" y2="12" class="translate-x-3 group-hover:translate-x-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out" />
-    <polyline points="12 5 19 12 12 19" class="-translate-x-1 group-hover:translate-x-0 transition-transform duration-300 ease-in-out" />
+    class="absolute top-4 right-3 size-4 stroke-2 fill-none stroke-current opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-200">
+    <line x1="5" y1="12" x2="19" y2="12" class="translate-x-1 group-hover:translate-x-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-in-out" />
+    <polyline points="12 5 19 12 12 19" class="-translate-x-0.5 group-hover:translate-x-0 transition-transform duration-200 ease-in-out" />
   </svg>
 </a>

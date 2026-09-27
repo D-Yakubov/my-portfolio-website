@@ -4,22 +4,23 @@ import Container from "@components/Container.astro";
 import PageLayout from "@layouts/PageLayout.astro";
 import ArrowCard from "@components/ArrowCard.astro";
 import Link from "@components/Link.astro";
+import Services from "@components/Services.astro";
 import { dateRange } from "@lib/utils";
 import { SITE, HOME, SOCIALS } from "@consts";
 
 const blog = (await getCollection("blog"))
   .filter(post => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0,SITE.NUM_POSTS_ON_HOMEPAGE);
+  .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
 
 const projects = (await getCollection("projects"))
   .filter(project => !project.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0,SITE.NUM_PROJECTS_ON_HOMEPAGE);
+  .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
 
 const allwork = (await getCollection("work"))
   .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
-  .slice(0,SITE.NUM_WORKS_ON_HOMEPAGE);
+  .slice(0, SITE.NUM_WORKS_ON_HOMEPAGE);
 
 const work = await Promise.all(
   allwork.map(async (item) => {
@@ -27,96 +28,65 @@ const work = await Promise.all(
     return { ...item, Content };
   })
 );
-
 ---
 
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
   <Container>
-    <h4 class="animate font-semibold text-black dark:text-white">
-      Hi, I'm Nano <span class="text-xl">👋🏻</span> 
-    </h4>
     <div class="space-y-16">
-      <section>
-        <article class="space-y-4">
-          <p class="animate">
-            I am a minimal, seo friendly, accessible portfolio and blog for developers. 
-            I am an even more lightweight version of my popular theme
-            <Link href="https://github.com/markhorn-dev/astro-sphere" aria-label="Astro Sphere on Github" external>
-              Astro Sphere
-            </Link>.
-            I have a lighthouse scores of 100 across the board for performance, 
-            accesibility, best practices and SEO.
-          </p>
-          <p class="animate">
-            I come packed with full type safety, a sitemap, an rss feed, markdown 
-            and mdx support (use components in your markdown) through astro integrations.
-            I am styled with tailwind and come preconfigured with light, dark and 
-            system/os theme preferences out of the box.
-          </p>
-          <p class="animate">
-            Visit
-            <Link href="https://github.com/markhorn-dev/astro-nano" aria-label="Astro Nano on Github" external>
-              Astro Nano on Github
-            </Link>
-            to fork the repository, read the docs or one-click deploy on Vercel or Netlify. 
-          </p>
-        </article>
-      </section>
-
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
-            Latest posts
-          </h5>
-          <Link href="/blog">
-            See all posts
-          </Link>
+      {/* Business-focused Hero Section */}
+      <section class="animate space-y-6 pt-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono border border-neutral-300 dark:border-neutral-800 bg-neutral-200/50 dark:bg-neutral-900/60 text-neutral-800 dark:text-neutral-300">
+          <span class="size-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>&gt; erp_optimizer --status: available_for_projects</span>
         </div>
-        <ul class="flex flex-col gap-4">
-          {blog.map(post => (
-            <li>
-              <ArrowCard entry={post} />
-            </li>
-          ))}
-        </ul>
-      </section>
 
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
-            Work Experience
-          </h5>
-          <Link href="/work">
-            See all work
-          </Link>
+        <div class="space-y-4 max-w-2xl">
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-black dark:text-white leading-[1.15]">
+            I make manufacturing and B2B systems run faster.
+          </h1>
+
+          <p class="text-base sm:text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans">
+            Freelance ERP maintainer and backend specialist (Python, FastAPI, PostgreSQL). I help companies automate data reporting, maintain legacy systems, and build robust APIs.
+          </p>
+
+          <div class="font-mono text-xs text-neutral-600 dark:text-neutral-400 flex flex-wrap gap-x-4 gap-y-1 pt-1">
+            <span>// core_stack: [Python, FastAPI, PostgreSQL, SQLAlchemy]</span>
+            <span>// domain: [Manufacturing, Logistics, Financial ERP]</span>
+          </div>
         </div>
-        <ul class="flex flex-col space-y-4">
-          {work.map(entry => (
-            <li>
-              <div class="text-sm opacity-75">
-                {dateRange(entry.data.dateStart, entry.data.dateEnd)}
-              </div>
-              <div class="font-semibold text-black dark:text-white">
-                {entry.data.company}
-              </div>
-              <div class="text-sm opacity-75">
-                {entry.data.role}
-              </div>
-              <article>
-                <entry.Content />
-              </article>
-            </li>
-          ))}
-        </ul>
+
+        {/* Primary CTA Button */}
+        <div class="pt-2 flex flex-wrap items-center gap-3">
+          <a
+            href={`mailto:${SITE.EMAIL}?subject=Project%20Inquiry%20-%20ERP%20%26%20Automation`}
+            class="inline-flex items-center gap-2 px-6 py-3 rounded font-mono text-sm font-semibold bg-emerald-400 hover:bg-emerald-300 text-neutral-950 dark:bg-emerald-400 dark:hover:bg-emerald-300 dark:text-neutral-950 transition-all shadow-sm hover:shadow hover:scale-[1.01] active:scale-[0.99]"
+          >
+            <span>Discuss Your Project</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+          <a
+            href="#services"
+            class="inline-flex items-center gap-2 px-4 py-3 rounded font-mono text-sm border border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-700 bg-neutral-100/50 dark:bg-neutral-900/40 text-neutral-800 dark:text-neutral-200 transition-colors"
+          >
+            <span>Explore Services</span>
+          </a>
+        </div>
       </section>
 
+      {/* Services Component */}
+      <Services />
+
+      {/* Featured Projects & Case Studies (Focusing on ROI) */}
       <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
-            Recent projects
-          </h5>
+        <div class="flex flex-wrap gap-y-2 items-center justify-between border-b border-neutral-300 dark:border-neutral-800 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400">&gt; case_studies</span>
+            <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-black dark:text-white">
+              Selected Systems &amp; ROI
+            </h2>
+          </div>
           <Link href="/projects">
-            See all projects
+            See all projects &rarr;
           </Link>
         </div>
         <ul class="flex flex-col gap-4">
@@ -128,23 +98,83 @@ const work = await Promise.all(
         </ul>
       </section>
 
-      <section class="animate space-y-4">
-        <h5 class="font-semibold text-black dark:text-white">
-          Let's Connect
-        </h5>
+      {/* Work Experience */}
+      <section class="animate space-y-6">
+        <div class="flex flex-wrap gap-y-2 items-center justify-between border-b border-neutral-300 dark:border-neutral-800 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400">&gt; track_record</span>
+            <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-black dark:text-white">
+              Production Experience
+            </h2>
+          </div>
+          <Link href="/work">
+            See full history &rarr;
+          </Link>
+        </div>
+        <ul class="flex flex-col space-y-6">
+          {work.map(entry => (
+            <li class="border-l-2 border-neutral-300 dark:border-neutral-800 pl-4 py-1">
+              <div class="text-xs font-mono opacity-70">
+                {dateRange(entry.data.dateStart, entry.data.dateEnd)}
+              </div>
+              <div class="font-semibold text-base text-black dark:text-white">
+                {entry.data.company}
+              </div>
+              <div class="text-xs font-mono text-emerald-600 dark:text-emerald-400">
+                {entry.data.role}
+              </div>
+              <article class="mt-2 text-xs sm:text-sm">
+                <entry.Content />
+              </article>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Technical Writing & Insights (Conditional) */}
+      {blog.length > 0 && (
+        <section class="animate space-y-6">
+          <div class="flex flex-wrap gap-y-2 items-center justify-between border-b border-neutral-300 dark:border-neutral-800 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400">&gt; technical_notes</span>
+              <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-black dark:text-white">
+                Architecture &amp; Insights
+              </h2>
+            </div>
+            <Link href="/blog">
+              See all articles &rarr;
+            </Link>
+          </div>
+          <ul class="flex flex-col gap-4">
+            {blog.map(post => (
+              <li>
+                <ArrowCard entry={post} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Contact Section */}
+      <section id="contact" class="animate space-y-4 scroll-mt-24 border-t border-neutral-300 dark:border-neutral-800 pt-8">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400">&gt; contact</span>
+          <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-black dark:text-white">
+            Let's Connect
+          </h2>
+        </div>
         <article>
-          <p>
-            If you want to get in touch with me about something or just to say hi,
-            reach out on social media or send me an email.
+          <p class="text-sm text-neutral-700 dark:text-neutral-300">
+            Have a project in mind, an ERP bottleneck to troubleshoot, or need custom backend automation? Reach out directly via email or socials.
           </p>
         </article>
-        <ul class="flex flex-wrap gap-2">
+        <ul class="flex flex-wrap gap-2 text-sm font-mono pt-1">
           {SOCIALS.map(SOCIAL => (
             <li class="flex gap-x-2 text-nowrap">
               <Link href={SOCIAL.HREF} external aria-label={`${SITE.NAME} on ${SOCIAL.NAME}`}>
                 {SOCIAL.NAME}
               </Link>
-              {"/"}
+              <span class="opacity-40">/</span>
             </li>
           ))}
           <li class="line-clamp-1">

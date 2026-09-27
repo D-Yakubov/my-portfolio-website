@@ -1,64 +1,50 @@
-![Astro Nano](_astro_nano.png)
+# Dastonbek Yakubov - Personal Portfolio & Blog
 
-Astro Nano is a static, minimalist, lightweight, lightning fast portfolio and blog theme.
+Personal portfolio and blog built with [Astro](https://astro.build) and [Tailwind CSS](https://tailwindcss.com).
 
-Built with Astro, Tailwind and Typescript, an no frameworks.
+## 🚀 Tech Stack
 
-It was designed as an even more minimal theme than my popular theme [Astro Sphere](https://github.com/markhorn-dev/astro-sphere)
+- **Framework:** Astro 4
+- **Styling:** Tailwind CSS with Typography plugin
+- **Fonts:** Inter & Lora (@fontsource)
+- **Deployment:** Vercel / Netlify / VPS
+- **Type Safety:** TypeScript
 
-## 🚀 Deploy your own
+## 📁 Project Structure
 
-[![Deploy with Vercel](_deploy_vercel.svg)](https://vercel.com/new/clone?repository-url=https://github.com/markhorn-dev/astro-nano)  [![Deploy with Netlify](_deploy_netlify.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/markhorn-dev/astro-nano)
+```text
+├── public/              # Static assets (favicons)
+├── src/
+│   ├── components/      # Reusable UI components
+│   ├── content/         # Content collections
+│   │   ├── blog/        # Blog articles in Markdown
+│   │   ├── projects/    # Project showcases
+│   │   └── work/        # Work experience entries
+│   ├── layouts/         # Base page layouts
+│   ├── lib/             # Helper utilities
+│   ├── pages/           # Site routing
+│   ├── styles/          # Global styles
+│   └── consts.ts        # Site metadata and configuration
+├── astro.config.mjs     # Astro configuration
+└── tailwind.config.mjs  # Tailwind configuration
+```
 
-## 📋 Features
+## 🛠️ Development
 
-- ✅ 100/100 Lighthouse performance
-- ✅ Responsive
-- ✅ Accessible
-- ✅ SEO-friendly
-- ✅ Typesafe
-- ✅ Minimal style
-- ✅ Light/Dark Theme
-- ✅ Animated UI
-- ✅ Tailwind styling
-- ✅ Auto generated sitemap
-- ✅ Auto generated RSS Feed
-- ✅ Markdown support
-- ✅ MDX Support (components in your markdown)
+```bash
+# Install dependencies
+npm install
 
-## 💯 Lighthouse score
-![Astro Nano Lighthouse Score](_lighthouse.png)
+# Start local development server
+npm run dev
 
-## 🕊️ Lightweight
-No frameworks or added bulk
+# Build for production
+npm run build
 
-## ⚡︎ Fast
-Rendered in ~40ms on localhost
+# Preview production build
+npm run preview
+```
 
-## 📄 Configuration
-
-The blog posts on the demo serve as the documentation and configuration.
-
-## 💻 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-Replace npm with your package manager of choice. `npm`, `pnpm`, `yarn`, `bun`, etc
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run dev:network`     | Starts local dev server on local network         |
-| `npm run sync`            | Generates TypeScript types for all Astro modules.|
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run preview:network` | Preview build on local network                   |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-| `npm run lint`            | Run ESLint                                       |
-| `npm run lint:fix`        | Auto-fix ESLint issues                           |
-
-## 🏛️ License
+## 📄 License
 
 MIT

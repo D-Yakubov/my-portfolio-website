@@ -1,5 +1,7 @@
 export type Site = {
   NAME: string;
+  TITLE: string;
+  DESCRIPTION: string;
   EMAIL: string;
   NUM_POSTS_ON_HOMEPAGE: number;
   NUM_WORKS_ON_HOMEPAGE: number;
@@ -15,3 +17,8 @@ export type Socials = {
   NAME: string;
   HREF: string;
 }[];
+
+export type NavLink = {
+  NAME: string;
+  HREF: string;
+};
