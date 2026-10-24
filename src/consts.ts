@@ -40,7 +40,7 @@ export const NAV_LINKS: NavLink[] = [
 export const SOCIALS: Socials = [
   { 
     NAME: "telegram",
-    HREF: "https://t.me/dyakubov",
+    HREF: "https://t.me/dastonbekuz",
   },
   { 
     NAME: "github",

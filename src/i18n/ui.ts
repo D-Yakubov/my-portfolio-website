@@ -168,7 +168,7 @@ export const ui = {
       },
       {
         question: "How can we start working together and what is the process?",
-        answer: "We begin with a brief 30-minute discovery consultation where we discuss your system bottlenecks or project goals. I then provide an actionable technical proposal with clear milestones, deliverables, and estimated ROI. Reach out via email (yakubovdastonbek@gmail.com) or Telegram (@dyakubov).",
+        answer: "We begin with a brief 30-minute discovery consultation where we discuss your system bottlenecks or project goals. I then provide an actionable technical proposal with clear milestones, deliverables, and estimated ROI. Reach out via email (yakubovdastonbek@gmail.com) or Telegram (@dastonbekuz).",
       },
     ] as FAQItem[],
     contactSection: {
@@ -328,7 +328,7 @@ export const ui = {
       },
       {
         question: "Hamkorlikni qanday boshlaymiz va jarayon qanday kechadi?",
-        answer: "Hamkorlikni 30 daqiqalik bepul texnik konsultatsiyadan boshlaymiz: tizimingizdagi muammolar yoki yangi loyiha talablarini muhokama qilamiz. Shundan so'ng aniq muddat, bosqichlar va kutilayotgan natijalar ko'rsatilgan rejani taqdim etaman. Email yoki Telegram (@dyakubov) orqali bog'lanishingiz mumkin.",
+        answer: "Hamkorlikni 30 daqiqalik bepul texnik konsultatsiyadan boshlaymiz: tizimingizdagi muammolar yoki yangi loyiha talablarini muhokama qilamiz. Shundan so'ng aniq muddat, bosqichlar va kutilayotgan natijalar ko'rsatilgan rejani taqdim etaman. Email yoki Telegram (@dastonbekuz) orqali bog'lanishingiz mumkin.",
       },
     ] as FAQItem[],
     contactSection: {
@@ -488,7 +488,7 @@ export const ui = {
       },
       {
         question: "Как начать сотрудничество и как строится рабочий процесс?",
-        answer: "Мы начинаем с 30-минутной первичной консультации, где обсуждаем текущие технические проблемы или требования к новому проекту. Затем я формирую четкий план с этапами, сроками и ожидаемым результатом. Напишите мне на почту или в Telegram (@dyakubov).",
+        answer: "Мы начинаем с 30-минутной первичной консультации, где обсуждаем текущие технические проблемы или требования к новому проекту. Затем я формирую четкий план с этапами, сроками и ожидаемым результатом. Напишите мне на почту или в Telegram (@dastonbekuz).",
       },
     ] as FAQItem[],
     contactSection: {
