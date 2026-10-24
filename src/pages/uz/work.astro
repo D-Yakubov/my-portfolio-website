@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content";
+import PageLayout from "@layouts/PageLayout.astro";
+import Container from "@components/Container.astro";
+import { dateRange } from "@lib/utils";
+
+const collection = (await getCollection("work"))
+  .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf());
+
+const work = await Promise.all(
+  collection.map(async (item) => {
+    const { Content } = await item.render();
+    return { ...item, Content };
+  })
+);
+---
+
+<PageLayout title="Ishlab Chiqarishdagi Tajriba | Dastonbek" description="Ishlab chiqarish ERP tizimlari, backend servislar va AI tizimlari bo'yicha amaliy ish tajribasi." lang="uz">
+  <Container>
+    <div class="space-y-10">
+      <div class="flex items-center gap-2 border-b border-neutral-300 dark:border-neutral-800 pb-3">
+        <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400">&gt; tajriba --tarix</span>
+        <h1 class="text-sm font-mono font-semibold uppercase tracking-wider text-black dark:text-white">
+          Ishlab Chiqarishdagi Tajriba
+        </h1>
+      </div>
+      <ul class="flex flex-col space-y-6">
+        { 
+          work.map(entry => (
+            <li class="animate border-l-2 border-neutral-300 dark:border-neutral-800 pl-4 py-1">
+              <div class="text-xs font-mono opacity-70">
+                {dateRange(entry.data.dateStart, entry.data.dateEnd)}
+              </div>
+              <div class="font-semibold text-base text-black dark:text-white">
+                {entry.data.company}
+              </div>
+              <div class="text-xs font-mono text-emerald-600 dark:text-emerald-400">
+                {entry.data.role}
+              </div>
+              <article class="mt-2 text-xs sm:text-sm">
+                <entry.Content />
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Container>
+</PageLayout>

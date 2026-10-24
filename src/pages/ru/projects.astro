@@ -1,0 +1,32 @@
+---
+import { getCollection } from "astro:content";
+import PageLayout from "@layouts/PageLayout.astro";
+import Container from "@components/Container.astro";
+import ArrowCard from "@components/ArrowCard.astro";
+
+const projects = (await getCollection("projects"))
+  .filter(project => !project.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<PageLayout title="Проекты и Кейсы | Дастонбек" description="Реализованные проекты по разработке ERP, автоматизации бизнеса и интеграции ИИ." lang="ru">
+  <Container>
+    <div class="space-y-10">
+      <div class="flex items-center gap-2 border-b border-neutral-300 dark:border-neutral-800 pb-3">
+        <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400">&gt; проекты --все</span>
+        <h1 class="text-sm font-mono font-semibold uppercase tracking-wider text-black dark:text-white">
+          Реализованные Проекты и ROI
+        </h1>
+      </div>
+      <ul class="animate flex flex-col gap-4">
+        {
+          projects.map((project) => (
+            <li>
+              <ArrowCard entry={project} lang="ru"/>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Container>
+</PageLayout>

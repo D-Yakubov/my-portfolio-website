@@ -2,17 +2,17 @@ import type { Site, Metadata, Socials, NavLink } from "@types";
 
 export const SITE: Site = {
   NAME: "Dastonbek",
-  TITLE: "Dastonbek | Business Automation & ERP Specialist",
-  DESCRIPTION: "Freelance ERP maintainer and backend specialist (Python, FastAPI, PostgreSQL). I help manufacturing and B2B companies automate reporting, optimize databases, and build robust APIs.",
+  TITLE: "Dastonbek | Backend Engineering, ERP & AI Automation",
+  DESCRIPTION: "Backend Software Engineer & AI Automation Specialist based in Tashkent, Uzbekistan. Core stack: Python, FastAPI, PostgreSQL. High-demand services in ERP maintenance, AI agents, Telegram ecosystems, and database optimization.",
   EMAIL: "yakubovdastonbek@gmail.com",
   NUM_POSTS_ON_HOMEPAGE: 2,
   NUM_WORKS_ON_HOMEPAGE: 2,
-  NUM_PROJECTS_ON_HOMEPAGE: 3,
+  NUM_PROJECTS_ON_HOMEPAGE: 4,
 };
 
 export const HOME: Metadata = {
-  TITLE: "Dastonbek | Business Automation & ERP Specialist",
-  DESCRIPTION: "Freelance ERP maintainer and backend specialist (Python, FastAPI, PostgreSQL). I make manufacturing and B2B systems run faster.",
+  TITLE: "Dastonbek | Backend Engineering, ERP & AI Automation",
+  DESCRIPTION: "Backend Software Engineer & AI Automation Specialist based in Tashkent, Uzbekistan. I make manufacturing and B2B systems run faster with Python, FastAPI, PostgreSQL, and AI.",
 };
 
 export const BLOG: Metadata = {
@@ -22,7 +22,7 @@ export const BLOG: Metadata = {
 
 export const WORK: Metadata = {
   TITLE: "Experience",
-  DESCRIPTION: "Track record in enterprise ERP maintenance and backend engineering.",
+  DESCRIPTION: "Track record in enterprise ERP maintenance, AI workflows, and backend engineering.",
 };
 
 export const PROJECTS: Metadata = {
@@ -38,6 +38,10 @@ export const NAV_LINKS: NavLink[] = [
 ];
 
 export const SOCIALS: Socials = [
+  { 
+    NAME: "telegram",
+    HREF: "https://t.me/dyakubov",
+  },
   { 
     NAME: "github",
     HREF: "https://github.com/D-Yakubov",

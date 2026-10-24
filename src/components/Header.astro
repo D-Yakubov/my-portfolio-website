@@ -1,30 +1,75 @@
 ---
 import Container from "@components/Container.astro";
 import Link from "@components/Link.astro";
-import { SITE, NAV_LINKS } from "@consts";
+import { SITE } from "@consts";
+import { languages, getNavLinks, type SupportedLang } from "@i18n/ui";
+
+type Props = {
+  lang?: SupportedLang;
+};
+
+const { lang = "en" } = Astro.props;
+const navLinks = getNavLinks(lang);
+
+const currentPath = Astro.url.pathname;
+function getPathForLang(targetLang: SupportedLang) {
+  let cleanPath = currentPath.replace(/^\/(uz|ru)(\/|$)/, "/");
+  if (!cleanPath.startsWith("/")) cleanPath = "/" + cleanPath;
+  if (targetLang === "en") {
+    return cleanPath;
+  }
+  return cleanPath === "/" ? `/${targetLang}` : `/${targetLang}${cleanPath}`;
+}
 ---
 
 <header>
   <Container>
-    <div class="flex flex-wrap gap-y-2 justify-between items-center">
-      <Link href="/" underline={false}>
+    <div class="flex flex-wrap gap-y-3 justify-between items-center">
+      <Link href={lang === "en" ? "/" : `/${lang}`} underline={false}>
         <div class="font-semibold font-mono tracking-tight text-black dark:text-white flex items-center gap-1.5 group">
           <span class="text-emerald-500 font-bold group-hover:translate-x-0.5 transition-transform">&gt;_</span>
           <span>{SITE.NAME}</span>
         </div>
       </Link>
-      <nav class="flex items-center gap-2 text-xs sm:text-sm font-mono">
-        {NAV_LINKS.map((link, index) => (
-          <div class="flex items-center gap-2">
-            <Link href={link.HREF}>
-              {link.NAME.toLowerCase()}
-            </Link>
-            {index < NAV_LINKS.length - 1 && (
-              <span class="opacity-30">/</span>
-            )}
-          </div>
-        ))}
-      </nav>
+      
+      <div class="flex items-center gap-3 sm:gap-6">
+        <nav class="flex items-center gap-2 text-xs sm:text-sm font-mono">
+          {navLinks.map((link, index) => (
+            <div class="flex items-center gap-2">
+              <Link href={link.HREF}>
+                {link.NAME.toLowerCase()}
+              </Link>
+              {index < navLinks.length - 1 && (
+                <span class="opacity-30">/</span>
+              )}
+            </div>
+          ))}
+        </nav>
+
+        {/* Terminal Language Switcher */}
+        <div class="flex items-center gap-1 text-[11px] font-mono border-l border-neutral-300 dark:border-neutral-800 pl-3">
+          {(["en", "uz", "ru"] as SupportedLang[]).map((l, index) => {
+            const isActive = l === lang;
+            const targetHref = getPathForLang(l);
+            return (
+              <div class="flex items-center gap-1">
+                <a
+                  href={targetHref}
+                  class={`px-1.5 py-0.5 rounded text-[10px] uppercase tracking-wider transition-colors ${
+                    isActive
+                      ? "bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-bold border border-emerald-500/40"
+                      : "text-neutral-500 hover:text-black dark:hover:text-white"
+                  }`}
+                  title={languages[l]}
+                >
+                  {l}
+                </a>
+                {index < 2 && <span class="opacity-25 text-[10px]">&middot;</span>}
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   </Container>
 </header>

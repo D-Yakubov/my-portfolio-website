@@ -1,0 +1,217 @@
+---
+import { getCollection } from "astro:content";
+import Container from "@components/Container.astro";
+import PageLayout from "@layouts/PageLayout.astro";
+import ArrowCard from "@components/ArrowCard.astro";
+import Link from "@components/Link.astro";
+import Services from "@components/Services.astro";
+import FAQ from "@components/FAQ.astro";
+import { dateRange } from "@lib/utils";
+import { SITE, SOCIALS } from "@consts";
+import { getTranslations, type SupportedLang } from "@i18n/ui";
+
+type Props = {
+  lang?: SupportedLang;
+};
+
+const { lang = "en" } = Astro.props;
+const t = getTranslations(lang);
+
+const blog = (await getCollection("blog"))
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
+
+const projects = (await getCollection("projects"))
+  .filter(project => !project.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
+
+const allwork = (await getCollection("work"))
+  .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
+  .slice(0, SITE.NUM_WORKS_ON_HOMEPAGE);
+
+const work = await Promise.all(
+  allwork.map(async (item) => {
+    const { Content } = await item.render();
+    return { ...item, Content };
+  })
+);
+
+const serviceAnchor = lang === "en" ? "#services" : `/${lang}#services`;
+const projectsPageLink = lang === "en" ? "/projects" : `/${lang}/projects`;
+const workPageLink = lang === "en" ? "/work" : `/${lang}/work`;
+const blogPageLink = lang === "en" ? "/blog" : `/${lang}/blog`;
+---
+
+<PageLayout title={t.siteTitle} description={t.siteDescription} lang={lang} faq={t.faq}>
+  <Container>
+    <div class="space-y-16">
+      {/* Business & AI-focused Hero Section */}
+      <section class="animate space-y-6 pt-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono border border-neutral-300 dark:border-neutral-800 bg-neutral-200/50 dark:bg-neutral-900/60 text-neutral-800 dark:text-neutral-300">
+          <span class="size-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>{t.hero.status}</span>
+        </div>
+
+        <div class="space-y-4 max-w-2xl">
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-black dark:text-white leading-[1.15]">
+            {t.hero.headline}
+          </h1>
+
+          <p class="text-base sm:text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans">
+            {t.hero.subheadline}
+          </p>
+
+          <div class="font-mono text-xs text-neutral-600 dark:text-neutral-400 flex flex-wrap gap-x-4 gap-y-1 pt-1">
+            <span>{t.hero.stack}</span>
+            <span>{t.hero.domain}</span>
+          </div>
+        </div>
+
+        {/* Primary CTA Buttons */}
+        <div class="pt-2 flex flex-wrap items-center gap-3">
+          <a
+            href={`mailto:${SITE.EMAIL}?subject=${encodeURIComponent(t.hero.ctaPrimary + " - ERP & AI Automation")}`}
+            class="inline-flex items-center gap-2 px-6 py-3 rounded font-mono text-sm font-semibold bg-emerald-400 hover:bg-emerald-300 text-neutral-950 dark:bg-emerald-400 dark:hover:bg-emerald-300 dark:text-neutral-950 transition-all shadow-sm hover:shadow hover:scale-[1.01] active:scale-[0.99]"
+          >
+            <span>{t.hero.ctaPrimary}</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+          <a
+            href="https://t.me/dyakubov"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-5 py-3 rounded font-mono text-sm border border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-700 bg-neutral-100/50 dark:bg-neutral-900/40 text-neutral-800 dark:text-neutral-200 transition-colors"
+          >
+            <svg class="size-4 fill-current text-sky-500" viewBox="0 0 24 24">
+              <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.832.922z"/>
+            </svg>
+            <span>Telegram</span>
+          </a>
+          <a
+            href={serviceAnchor}
+            class="inline-flex items-center gap-2 px-4 py-3 rounded font-mono text-sm text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors"
+          >
+            <span>{t.hero.ctaSecondary} &darr;</span>
+          </a>
+        </div>
+      </section>
+
+      {/* Services Component (6 in-demand services) */}
+      <Services lang={lang} />
+
+      {/* Featured Projects & Case Studies */}
+      <section class="animate space-y-6">
+        <div class="flex flex-wrap gap-y-2 items-center justify-between border-b border-neutral-300 dark:border-neutral-800 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400">{t.projectsSection.badge}</span>
+            <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-black dark:text-white">
+              {t.projectsSection.title}
+            </h2>
+          </div>
+          <Link href={projectsPageLink}>
+            {t.projectsSection.all} &rarr;
+          </Link>
+        </div>
+        <ul class="flex flex-col gap-4">
+          {projects.map(project => (
+            <li>
+              <ArrowCard entry={project} lang={lang} />
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Work Experience */}
+      <section class="animate space-y-6">
+        <div class="flex flex-wrap gap-y-2 items-center justify-between border-b border-neutral-300 dark:border-neutral-800 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400">{t.workSection.badge}</span>
+            <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-black dark:text-white">
+              {t.workSection.title}
+            </h2>
+          </div>
+          <Link href={workPageLink}>
+            {t.workSection.all} &rarr;
+          </Link>
+        </div>
+        <ul class="flex flex-col space-y-6">
+          {work.map(entry => (
+            <li class="border-l-2 border-neutral-300 dark:border-neutral-800 pl-4 py-1">
+              <div class="text-xs font-mono opacity-70">
+                {dateRange(entry.data.dateStart, entry.data.dateEnd)}
+              </div>
+              <div class="font-semibold text-base text-black dark:text-white">
+                {entry.data.company}
+              </div>
+              <div class="text-xs font-mono text-emerald-600 dark:text-emerald-400">
+                {entry.data.role}
+              </div>
+              <article class="mt-2 text-xs sm:text-sm">
+                <entry.Content />
+              </article>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Frequently Asked Questions (FAQ with Schema.org optimization) */}
+      <FAQ lang={lang} />
+
+      {/* Technical Writing & Insights (Conditional) */}
+      {blog.length > 0 && (
+        <section class="animate space-y-6">
+          <div class="flex flex-wrap gap-y-2 items-center justify-between border-b border-neutral-300 dark:border-neutral-800 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400">{t.blogSection.badge}</span>
+              <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-black dark:text-white">
+                {t.blogSection.title}
+              </h2>
+            </div>
+            <Link href={blogPageLink}>
+              {t.blogSection.all} &rarr;
+            </Link>
+          </div>
+          <ul class="flex flex-col gap-4">
+            {blog.map(post => (
+              <li>
+                <ArrowCard entry={post} lang={lang} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Contact Section */}
+      <section id="contact" class="animate space-y-4 scroll-mt-24 border-t border-neutral-300 dark:border-neutral-800 pt-8">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400">{t.contactSection.badge}</span>
+          <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-black dark:text-white">
+            {t.contactSection.title}
+          </h2>
+        </div>
+        <article>
+          <p class="text-sm text-neutral-700 dark:text-neutral-300">
+            {t.contactSection.desc}
+          </p>
+        </article>
+        <ul class="flex flex-wrap gap-2 text-sm font-mono pt-1">
+          {SOCIALS.map(SOCIAL => (
+            <li class="flex gap-x-2 text-nowrap">
+              <Link href={SOCIAL.HREF} external aria-label={`${SITE.NAME} on ${SOCIAL.NAME}`}>
+                {SOCIAL.NAME}
+              </Link>
+              <span class="opacity-40">/</span>
+            </li>
+          ))}
+          <li class="line-clamp-1">
+            <Link href={`mailto:${SITE.EMAIL}`} aria-label={`Email ${SITE.NAME}`}>
+              {SITE.EMAIL}
+            </Link>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </Container>
+</PageLayout>

@@ -2,6 +2,14 @@
 import Container from "@components/Container.astro";
 import { SITE } from "@consts";
 import BackToTop from "@components/BackToTop.astro";
+import { getTranslations, type SupportedLang } from "@i18n/ui";
+
+type Props = {
+  lang?: SupportedLang;
+};
+
+const { lang = "en" } = Astro.props;
+const t = getTranslations(lang);
 ---
 
 <footer class="animate pt-10 pb-8">
@@ -13,22 +21,22 @@ import BackToTop from "@components/BackToTop.astro";
           <div class="flex items-center gap-2">
             <span class="size-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span class="font-mono text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
-              System Audit &amp; Technical Discovery
+              {t.footerCTA.badge}
             </span>
           </div>
           <h3 class="font-bold text-lg sm:text-xl text-black dark:text-white tracking-tight">
-            Struggling with a slow ERP or manual reporting bottlenecks? Let's fix it.
+            {t.footerCTA.headline}
           </h3>
           <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 font-sans">
-            Direct review of your slow query logs, database schema, and backend architecture.
+            {t.footerCTA.subheadline}
           </p>
         </div>
         <div class="shrink-0">
           <a
-            href={`mailto:${SITE.EMAIL}?subject=ERP%20%2F%20Bottleneck%20Consultation`}
+            href={`mailto:${SITE.EMAIL}?subject=${encodeURIComponent(t.footerCTA.headline)}`}
             class="inline-flex items-center gap-2 px-5 py-2.5 rounded font-mono text-xs sm:text-sm font-semibold border border-neutral-400 dark:border-neutral-700 bg-black text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-950 dark:hover:bg-white transition-all shadow-sm"
           >
-            <span>Let's Talk</span>
+            <span>{t.footerCTA.button}</span>
             <span aria-hidden="true">&rarr;</span>
           </a>
         </div>

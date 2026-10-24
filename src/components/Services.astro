@@ -1,56 +1,27 @@
 ---
-const services = [
-  {
-    code: "01",
-    title: "ERP System Maintenance",
-    summary: "Bug fixing, legacy system support, and database optimization.",
-    icon: "database",
-    details: [
-      "Legacy codebase refactoring & stabilization",
-      "Slow SQL query & index optimization (~50% latency reduction)",
-      "Role-based access control (RBAC) & data security",
-      "Financial, warehouse & contracts module debugging"
-    ]
-  },
-  {
-    code: "02",
-    title: "Custom API Development",
-    summary: "Secure, scalable backends using FastAPI and Spring Boot.",
-    icon: "api",
-    details: [
-      "High-throughput asynchronous RESTful backends",
-      "Strict schema validation & automatic OpenAPI docs",
-      "Database ORM modeling & Alembic migrations",
-      "OAuth2 authentication & third-party integrations"
-    ]
-  },
-  {
-    code: "03",
-    title: "Data & Reporting Automation",
-    summary: "Extracting actionable insights directly for CEOs and management.",
-    icon: "chart",
-    details: [
-      "Automated cross-module financial & inventory reconciliation",
-      "Replacing fragile spreadsheets with automated pipelines",
-      "Custom analytics endpoints & real-time executive summaries",
-      "Scheduled reporting cron jobs & alert triggers"
-    ]
-  }
-];
+import { getTranslations, type SupportedLang } from "@i18n/ui";
+
+type Props = {
+  lang?: SupportedLang;
+};
+
+const { lang = "en" } = Astro.props;
+const t = getTranslations(lang);
+const services = t.services;
 ---
 
 <section id="services" class="animate space-y-6 scroll-mt-24">
   <div class="flex items-center justify-between border-b border-neutral-300 dark:border-neutral-800 pb-3">
     <div class="flex items-center gap-2">
-      <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400">&gt; services --list</span>
+      <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400">{t.servicesSection.badge}</span>
       <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-black dark:text-white">
-        Freelance Services
+        {t.servicesSection.title}
       </h2>
     </div>
-    <span class="text-xs font-mono opacity-50 hidden sm:inline">// manufacturing &amp; logistics</span>
+    <span class="text-xs font-mono opacity-50 hidden sm:inline">{t.servicesSection.subtitle}</span>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     {services.map((service) => (
       <div class="group relative rounded-lg border border-neutral-300 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/40 p-5 flex flex-col justify-between hover:border-neutral-400 dark:hover:border-neutral-700 transition-all duration-200">
         <div class="space-y-3">
@@ -63,11 +34,32 @@ const services = [
                   <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>
                 </svg>
               )}
+              {service.icon === "brain" && (
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2a4 4 0 0 0-4 4v1a4 4 0 0 0-2 3.5 4 4 0 0 0 2 3.5V15a4 4 0 0 0 4 4h0a4 4 0 0 0 4-4v-1a4 4 0 0 0 2-3.5 4 4 0 0 0-2-3.5V6a4 4 0 0 0-4-4Z"/>
+                  <path d="M9 10h6"/>
+                  <path d="M12 7v6"/>
+                </svg>
+              )}
               {service.icon === "api" && (
                 <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <rect width="18" height="18" x="3" y="3" rx="2"/>
                   <path d="m9 8 3 3-3 3"/>
                   <path d="M14 14h2"/>
+                </svg>
+              )}
+              {service.icon === "bot" && (
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="18" height="14" x="3" y="6" rx="2"/>
+                  <path d="M12 2v4"/>
+                  <circle cx="8" cy="12" r="1" fill="currentColor"/>
+                  <circle cx="16" cy="12" r="1" fill="currentColor"/>
+                  <path d="M9 16h6"/>
+                </svg>
+              )}
+              {service.icon === "zap" && (
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
                 </svg>
               )}
               {service.icon === "chart" && (
@@ -84,6 +76,9 @@ const services = [
             <h3 class="font-semibold text-sm sm:text-base text-black dark:text-white">
               {service.title}
             </h3>
+            <p class="text-xs font-mono text-emerald-600 dark:text-emerald-400 mt-0.5">
+              {service.tagline}
+            </p>
             <p class="text-xs text-neutral-600 dark:text-neutral-400 mt-1 leading-relaxed">
               {service.summary}
             </p>

@@ -1,11 +1,14 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { getTranslations, type SupportedLang } from "@i18n/ui";
 
 type Props = {
   entry: CollectionEntry<"blog"> | CollectionEntry<"projects">;
+  lang?: SupportedLang;
 }
 
-const { entry } = Astro.props;
+const { entry, lang = "en" } = Astro.props;
+const t = getTranslations(lang);
 const isProject = entry.collection === "projects";
 const techStack = isProject && "techStack" in entry.data ? (entry.data.techStack as string[] | undefined) : undefined;
 const businessImpact = isProject && "businessImpact" in entry.data ? (entry.data.businessImpact as string | undefined) : undefined;
@@ -22,7 +25,7 @@ const businessImpact = isProject && "businessImpact" in entry.data ? (entry.data
       </span>
       {isProject && (
         <span class="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">
-          Case Study
+          {t.projectsSection.caseStudyBadge}
         </span>
       )}
     </div>
@@ -33,7 +36,7 @@ const businessImpact = isProject && "businessImpact" in entry.data ? (entry.data
 
     {businessImpact && (
       <div class="mt-1.5 text-xs font-mono rounded bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-1.5 text-emerald-900 dark:text-emerald-300 flex items-start gap-1.5">
-        <span class="font-bold text-emerald-600 dark:text-emerald-400 shrink-0">[Business Impact &bull; ROI]:</span>
+        <span class="font-bold text-emerald-600 dark:text-emerald-400 shrink-0">{t.projectsSection.roiLabel}:</span>
         <span class="leading-snug">{businessImpact}</span>
       </div>
     )}

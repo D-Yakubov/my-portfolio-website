@@ -1,13 +1,31 @@
 import type { APIRoute } from "astro";
 
-const robotsTxt = `
+export const GET: APIRoute = ({ site }) => {
+  const sitemapUrl = site ? new URL("sitemap-index.xml", site).href : "https://dastonbek.uz/sitemap-index.xml";
+  
+  const robotsTxt = `
 User-agent: *
 Allow: /
 
-Sitemap: ${new URL("sitemap-index.xml", import.meta.env.SITE).href}
+# Allow AI Search & Retrieval Engines (ChatGPT, Claude, Perplexity, Gemini)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: ${sitemapUrl}
 `.trim();
 
-export const GET: APIRoute = () => {
   return new Response(robotsTxt, {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",

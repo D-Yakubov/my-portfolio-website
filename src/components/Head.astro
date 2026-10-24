@@ -11,16 +11,134 @@ import lora600 from "@fontsource/lora/files/lora-latin-600-normal.woff2";
 
 import { ClientRouter } from "astro:transitions";
 import { SITE } from "@consts";
+import { getTranslations, type SupportedLang, type FAQItem } from "@i18n/ui";
 
 interface Props {
   title: string;
   description: string;
   image?: string;
+  lang?: SupportedLang;
+  faq?: FAQItem[];
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const { title, description, image = "/favicon-dark.svg", lang = "en", faq } = Astro.props;
+const t = getTranslations(lang);
 
-const { title, description, image = "/favicon-dark.svg" } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteOrigin = Astro.site ? Astro.site.origin : "https://dastonbek.uz";
+const ogImageUrl = new URL(image, Astro.url).href;
+
+const ogLocale = lang === "uz" ? "uz_UZ" : lang === "ru" ? "ru_RU" : "en_US";
+const alternateLocales = ["en_US", "uz_UZ", "ru_RU"].filter(l => l !== ogLocale);
+
+// Schema.org Graph
+const jsonLdGraph: any[] = [
+  {
+    "@type": "WebSite",
+    "@id": `${siteOrigin}/#website`,
+    "url": siteOrigin,
+    "name": "Dastonbek Yakubov | Backend & AI Automation Specialist",
+    "description": SITE.DESCRIPTION,
+    "inLanguage": ["en", "uz", "ru"]
+  },
+  {
+    "@type": "Person",
+    "@id": `${siteOrigin}/#person`,
+    "name": "Dastonbek Yakubov",
+    "alternateName": ["Дастонбек Якубов", "Dastonbek"],
+    "jobTitle": "Backend Software Engineer & AI Automation Specialist",
+    "url": siteOrigin,
+    "email": `mailto:${SITE.EMAIL}`,
+    "telephone": "+998937776670",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Tashkent",
+      "addressCountry": "UZ"
+    },
+    "sameAs": [
+      "https://github.com/D-Yakubov",
+      "https://www.linkedin.com/in/dyakubov/",
+      "https://twitter.com/dastonbekme",
+      "https://t.me/dyakubov"
+    ],
+    "knowsAbout": [
+      "Python",
+      "FastAPI",
+      "PostgreSQL",
+      "SQLAlchemy",
+      "Enterprise AI Integration",
+      "Large Language Models",
+      "Telegram Bot Architecture",
+      "ERP System Optimization",
+      "Database Tuning",
+      "Docker"
+    ],
+    "knowsLanguage": ["en", "uz", "ru"]
+  },
+  {
+    "@type": "ProfessionalService",
+    "@id": `${siteOrigin}/#service`,
+    "name": "Dastonbek Yakubov - Enterprise Software & AI Services",
+    "description": t.siteDescription,
+    "url": canonicalURL.href,
+    "telephone": "+998937776670",
+    "email": SITE.EMAIL,
+    "priceRange": "$$",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Tashkent",
+      "addressRegion": "Tashkent",
+      "addressCountry": "UZ"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 41.2995,
+      "longitude": 69.2401
+    },
+    "areaServed": [
+      {
+        "@type": "Country",
+        "name": "Uzbekistan"
+      },
+      {
+        "@type": "AdministrativeArea",
+        "name": "Central Asia"
+      },
+      {
+        "@type": "Place",
+        "name": "Worldwide"
+      }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Software Development & AI Automation Services",
+      "itemListElement": t.services.map((s, idx) => ({
+        "@type": "Offer",
+        "position": idx + 1,
+        "itemOffered": {
+          "@type": "Service",
+          "name": s.title,
+          "description": s.summary
+        }
+      }))
+    }
+  }
+];
+
+if (faq && faq.length > 0) {
+  jsonLdGraph.push({
+    "@type": "FAQPage",
+    "@id": `${canonicalURL.href}#faq`,
+    "mainEntity": faq.map(f => ({
+      "@type": "Question",
+      "name": f.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": f.answer
+      }
+    }))
+  });
+}
 ---
 
 <!-- Global Metadata -->
@@ -40,26 +158,53 @@ const { title, description, image = "/favicon-dark.svg" } = Astro.props;
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
+<!-- Multilingual SEO (hreflang) -->
+<link rel="alternate" hreflang="en" href={new URL("/", Astro.site).href} />
+<link rel="alternate" hreflang="uz" href={new URL("/uz", Astro.site).href} />
+<link rel="alternate" hreflang="ru" href={new URL("/ru", Astro.site).href} />
+<link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site).href} />
+
 <!-- Primary Meta Tags -->
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
+<meta name="keywords" content={t.keywords} />
+<meta name="author" content="Dastonbek Yakubov" />
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+<!-- Geo Local SEO (Tashkent, Uzbekistan) -->
+<meta name="geo.region" content="UZ-TO" />
+<meta name="geo.placename" content="Tashkent, Uzbekistan" />
+<meta name="geo.position" content="41.2995;69.2401" />
+<meta name="ICBM" content="41.2995, 69.2401" />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:site_name" content="Dastonbek Yakubov" />
+<meta property="og:locale" content={ogLocale} />
+{alternateLocales.map(loc => (
+  <meta property="og:locale:alternate" content={loc} />
+))}
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta property="twitter:image" content={ogImageUrl} />
+<meta property="twitter:creator" content="@dastonbekme" />
 
-<ClientRouter  />
+<!-- JSON-LD Structured Data Schema for Search Engines & Generative AI Crawlers -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": jsonLdGraph
+})} />
+
+<ClientRouter />
 
 <!-- RSS Link -->
 <link rel="alternate" type="application/rss+xml" title={SITE.NAME} href={new URL("rss.xml", Astro.site)} />
@@ -142,7 +287,7 @@ const { title, description, image = "/favicon-dark.svg" } = Astro.props;
     });
   }
 
-function toggleTheme(dark) {
+  function toggleTheme(dark) {
     const css = document.createElement("style");
 
     css.appendChild(
@@ -166,7 +311,7 @@ function toggleTheme(dark) {
       document.documentElement.classList.remove("dark");
     }
 
-  window.getComputedStyle(css).opacity;
+    window.getComputedStyle(css).opacity;
     document.head.removeChild(css);
   }
 

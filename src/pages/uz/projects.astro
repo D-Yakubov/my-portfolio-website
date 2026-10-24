@@ -1,0 +1,32 @@
+---
+import { getCollection } from "astro:content";
+import PageLayout from "@layouts/PageLayout.astro";
+import Container from "@components/Container.astro";
+import ArrowCard from "@components/ArrowCard.astro";
+
+const projects = (await getCollection("projects"))
+  .filter(project => !project.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<PageLayout title="Amaliy Loyihalar va Keyslar | Dastonbek" description="Ishlab chiqarish, ERP va sun'iy intellekt bo'yicha amalga oshirilgan loyihalar va biznes natijalari." lang="uz">
+  <Container>
+    <div class="space-y-10">
+      <div class="flex items-center gap-2 border-b border-neutral-300 dark:border-neutral-800 pb-3">
+        <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400">&gt; loyihalar --barchasi</span>
+        <h1 class="text-sm font-mono font-semibold uppercase tracking-wider text-black dark:text-white">
+          Amaliy Loyihalar va Natijalar
+        </h1>
+      </div>
+      <ul class="animate flex flex-col gap-4">
+        {
+          projects.map((project) => (
+            <li>
+              <ArrowCard entry={project} lang="uz"/>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Container>
+</PageLayout>

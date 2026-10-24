@@ -1,3 +1,5 @@
+export type SupportedLang = "en" | "uz" | "ru";
+
 export type Site = {
   NAME: string;
   TITLE: string;
@@ -21,4 +23,9 @@ export type Socials = {
 export type NavLink = {
   NAME: string;
   HREF: string;
+};
+
+export type FAQItem = {
+  question: string;
+  answer: string;
 };
