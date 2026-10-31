@@ -8,6 +8,10 @@ export const SITE: Site = {
   NUM_POSTS_ON_HOMEPAGE: 2,
   NUM_WORKS_ON_HOMEPAGE: 2,
   NUM_PROJECTS_ON_HOMEPAGE: 4,
+  ANALYTICS: {
+    GOOGLE_ANALYTICS_ID: "", // Set your GA4 Measurement ID (e.g. G-XXXXXXXXXX) or via PUBLIC_GA_ID in .env
+    YANDEX_METRIKA_ID: "",   // Optional: Set your Yandex Metrika ID or via PUBLIC_YM_ID in .env
+  },
 };
 
 export const HOME: Metadata = {

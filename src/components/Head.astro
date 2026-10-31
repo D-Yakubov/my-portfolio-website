@@ -12,6 +12,7 @@ import lora600 from "@fontsource/lora/files/lora-latin-600-normal.woff2";
 import { ClientRouter } from "astro:transitions";
 import { SITE } from "@consts";
 import { getTranslations, type SupportedLang, type FAQItem } from "@i18n/ui";
+import Analytics from "@components/Analytics.astro";
 
 interface Props {
   title: string;
@@ -205,6 +206,9 @@ if (faq && faq.length > 0) {
 })} />
 
 <ClientRouter />
+
+<!-- Analytics (Google Analytics GA4 & Yandex Metrika with View Transition SPA support) -->
+<Analytics />
 
 <!-- RSS Link -->
 <link rel="alternate" type="application/rss+xml" title={SITE.NAME} href={new URL("rss.xml", Astro.site)} />
