@@ -1,73 +1,87 @@
 ---
 import { SITE } from "@consts";
 
-const gaId = import.meta.env.PUBLIC_GA_ID || SITE.ANALYTICS?.GOOGLE_ANALYTICS_ID || "";
-const ymId = import.meta.env.PUBLIC_YM_ID || SITE.ANALYTICS?.YANDEX_METRIKA_ID || "";
+const gaId = (import.meta.env.PUBLIC_GA_ID || SITE.ANALYTICS?.GOOGLE_ANALYTICS_ID || "").trim();
+const ymId = (import.meta.env.PUBLIC_YM_ID || SITE.ANALYTICS?.YANDEX_METRIKA_ID || "").trim();
 
-const isGaEnabled = Boolean(gaId && gaId.trim() !== "" && !gaId.includes("XXXX"));
-const isYmEnabled = Boolean(ymId && ymId.trim() !== "" && !ymId.includes("XXXX"));
----
+const isGaEnabled = Boolean(gaId && !gaId.includes("XXXX"));
+const isYmEnabled = Boolean(ymId && !ymId.includes("XXXX"));
 
-{isGaEnabled && (
-  <script
-    is:inline
-    async
-    src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-  />
-  <script is:inline define:vars={{ gaId }}>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(...args) {
-      window.dataLayer.push(args);
-    }
-    window.gtag = gtag;
-    gtag("js", new Date());
-    gtag("config", gaId, {
-      send_page_view: false,
+const gaInitScript = isGaEnabled
+  ? `
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  window.gtag = gtag;
+  gtag('js', new Date());
+  gtag('config', '${gaId}');
+
+  if (!window.__gaAstroListenerAttached) {
+    window.__gaAstroListenerAttached = true;
+    document.addEventListener('astro:after-swap', function() {
+      gtag('config', '${gaId}', {
+        page_path: window.location.pathname + window.location.search,
+        page_title: document.title,
+        page_location: window.location.href
+      });
     });
+  }
+`
+  : "";
 
-    document.addEventListener("astro:page-load", () => {
-      if (typeof window.gtag === "function") {
-        window.gtag("event", "page_view", {
-          page_title: document.title,
-          page_location: window.location.href,
-          page_path: window.location.pathname + window.location.search,
+const ymInitScript = isYmEnabled
+  ? `
+  (function(m,e,t,r,i,k,a){
+    m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();
+    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+  })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+  ym(${Number(ymId)}, "init", {
+    clickmap: true,
+    trackLinks: true,
+    accurateTrackBounce: true,
+    webvisor: true
+  });
+
+  if (!window.__ymAstroListenerAttached) {
+    window.__ymAstroListenerAttached = true;
+    document.addEventListener("astro:after-swap", function() {
+      if (typeof window.ym === "function") {
+        window.ym(${Number(ymId)}, "hit", window.location.href, {
+          title: document.title
         });
       }
     });
-  </script>
+  }
+`
+  : "";
+---
+
+{isGaEnabled && (
+  <>
+    <!-- Google tag (gtag.js) -->
+    <script
+      is:inline
+      async
+      src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+    ></script>
+    <script is:inline set:html={gaInitScript} />
+  </>
 )}
 
 {isYmEnabled && (
-  <script is:inline define:vars={{ ymId }}>
-    (function(m,e,t,r,i,k,a){
-      m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-      m[i].l=1*new Date();
-      for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-    if (typeof window.ym === "function") {
-      window.ym(Number(ymId), "init", {
-        clickmap: true,
-        trackLinks: true,
-        accurateTrackBounce: true,
-        webvisor: true
-      });
-    }
-
-    document.addEventListener("astro:page-load", () => {
-      if (typeof window.ym === "function") {
-        window.ym(Number(ymId), "hit", window.location.href);
-      }
-    });
-  </script>
-  <noscript>
-    <div>
-      <img
-        src={`https://mc.yandex.ru/watch/${ymId}`}
-        style="position:absolute; left:-9999px;"
-        alt=""
-      />
-    </div>
-  </noscript>
+  <>
+    <script is:inline set:html={ymInitScript} />
+    <noscript>
+      <div>
+        <img
+          src={`https://mc.yandex.ru/watch/${ymId}`}
+          style="position:absolute; left:-9999px;"
+          alt=""
+        />
+      </div>
+    </noscript>
+  </>
 )}
+

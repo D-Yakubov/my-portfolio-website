@@ -145,6 +145,10 @@ if (faq && faq.length > 0) {
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<!-- Analytics (Google Analytics GA4 & Yandex Metrika - placed at top of <head> per Google Tag spec) -->
+<Analytics />
+
 <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/svg+xml" href="/favicon-light.svg" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/x-icon" href="/favicon-light.svg">
@@ -206,9 +210,6 @@ if (faq && faq.length > 0) {
 })} />
 
 <ClientRouter />
-
-<!-- Analytics (Google Analytics GA4 & Yandex Metrika with View Transition SPA support) -->
-<Analytics />
 
 <!-- RSS Link -->
 <link rel="alternate" type="application/rss+xml" title={SITE.NAME} href={new URL("rss.xml", Astro.site)} />
